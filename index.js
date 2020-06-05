@@ -2,7 +2,7 @@
 
 const util = require('util')
 const fs = require('fs')
-const json = require('./sessions/1_MX40NjE4NjE2Mn5-MTU4NDM2MTgzNDk3OH5ScWZiTS9kV1ZtbGxIejk5ZkZyMUZ4Qy9-fg/events.json')
+const json = require('./sessions/1_MX40NjE4NjE2Mn5-MTU4NDU4NjUyNTkwOH55RnhrdnNRc2lsTlJqUUZMOE9KOW00VUV-fg/events.json')
 const events = json.events
 const timestampToHumanReadable = timestamp => {
   const date = new Date(timestamp)
