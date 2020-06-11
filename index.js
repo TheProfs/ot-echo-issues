@@ -3,7 +3,6 @@
 const util = require('util')
 const fs = require('fs')
 const json = require('./sessions/2_MX40NjE4NjE2Mn5-MTU4NDM2MTcxMjc5M35JMVpPRDR5eFBwdCtaYWVjRi84V2xsL0h-fg/events.json')
-const events = json.events
 const timestampToHumanReadable = timestamp => {
   const date = new Date(timestamp)
   const _date = date.toISOString().split('T')[0]
@@ -12,56 +11,22 @@ const timestampToHumanReadable = timestamp => {
   return _date + ' ' + _time
 }
 
-const publishers = events.filter(e => {
-  return e.eventName === 'server_publisherCreated'
+const events = json.events.filter(e => {
+  return e.streamId === 'c459e893-2db7-49d8-821c-b26808559438' && e.eventName !== 'dimensionChange'
 })
 .map(e => {
   return {
-    user: e.processed.username,
+    eventName: e.eventName,
     streamId: e.streamId,
-    timestamp: e.timestamp,
     date: timestampToHumanReadable(e.timestamp),
-    subscribers: []
+    user: e.processed.username,
+    description: typeof e.processed.description === 'string' ? e.processed.description : e.processed.description.text
   }
 })
-.sort((a, b) => {
-  return a.timestamp - b.timestamp
+.filter(e => {
+  return e.date.includes('2020-05-27 19:55') ||
+    e.date.includes('2020-05-27 19:54') ||
+    e.date.includes('2020-05-27 19:53')
 })
 
-events.filter(e => e.eventName === 'subscribe_success')
-  .forEach(e => {
-    const publisher = publishers.find(p => {
-      return p.streamId === e.streamId
-    })
-
-    publisher.subscribers.push({
-      user: e.processed.username,
-      date: timestampToHumanReadable(e.timestamp)
-    })
-  })
-
-events.filter(e => e.eventName === 'server_publisherDestroyed')
-  .forEach(e => {
-    const publisher = publishers.find(p => {
-      return p.streamId === e.streamId
-    })
-
-    publisher.destroyed = timestampToHumanReadable(e.timestamp)
-  })
-
-const split = publishers.reduce((acc, p) => {
-  const date = timestampToHumanReadable(p.timestamp)
-
-  delete p.timestamp
-
-  if (acc[date]) {
-    acc[date].push(p)
-  } else {
-    acc[date] = [p]
-  }
-
-  return acc
-}, {})
-
-
-console.log(util.inspect(split, false, null, true))
+console.log(util.inspect(events, false, null, true))

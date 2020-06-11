@@ -3,6 +3,9 @@
 Show a *double subscription* error on
 stream: `c459e893-2db7-49d8-821c-b26808559438`.
 
+The offending user is on Firefox (Win 10), and the 2nd subscription event
+is preceded by:
+
 This could explain echo issues.
 
 ```js
